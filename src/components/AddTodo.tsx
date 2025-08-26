@@ -1,32 +1,33 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addTodo } from "../features/todos/todoSlice";
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addTodo } from '../features/todos/todoSlice';
 
 function AddTodo() {
-  const [text, setText] = useState<string>("");
+  const [text, setText] = useState<string>('');
   const dispatch = useDispatch();
+
+  const inputClasses = 'px-4 py-3 w-[30rem] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (text.trim()) {
       dispatch(addTodo(text));
-      setText("");
+      setText('');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "2rem" }}>
+    <form onSubmit={handleSubmit} className="my-4">
       <input
+        id="new-todo"
+        name="new-todo"
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Что нужно сделать?"
-        style={{ padding: "0.8rem", width: "30rem" }}
+        className={ inputClasses }
       />
-      <button
-        type="submit"
-        style={{ marginLeft: "1rem", padding: "0.8rem 1.2rem" }}
-      >
+      <button type="submit" className="ml-4 px-5 py-3 bg-blue-400 text-white hover:bg-blue-600">
         Добавить
       </button>
     </form>

@@ -1,68 +1,69 @@
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../app/store";
-import { toggleTodo, deleteTodo } from "../features/todos/todoSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../app/store';
+import {
+  clearCompleted,
+  deleteTodo,
+  toggleTodo,
+} from '../features/todos/todoSlice';
+import { filterTodos } from '../utils/todoFilter';
+import { getEmptyListMessage } from '../utils/todoMessages';
+import { formatDate } from '../utils/formatDate';
 
-function TodoList() {
+interface TodoListProps {
+  searchTerm: string;
+}
+
+function TodoList({ searchTerm }: TodoListProps) {
   const todos = useSelector((state: RootState) => state.todos.items);
   const filter = useSelector((state: RootState) => state.visibilityFilter);
   const dispatch = useDispatch();
 
-const filteredTodos = todos.filter((todo) => {
-  switch (filter) {
-    case 'active':
-      return !todo.completed;
-    case 'completed':
-      return todo.completed;
-    case 'all':
-    default:
-      return true;
-  }
-});
+  const filteredTodos = filterTodos(todos, filter, searchTerm);
 
   return (
-    <ul style={{ listStyle: "none", padding: 0 }}>
-      {filteredTodos.length === 0 ? (
-        <li style={{ color: "#888", fontStyle: "italic", padding: "0.5rem 0" }}>
-          {filter === "all"
-            ? "Нет задач"
-            : filter === "active"
-            ? "Нет активных задач"
-            : "Нет завершённых задач"}
-        </li>
-      ) : (
-        filteredTodos.map((todo) => (
-          <li
-            key={todo.id}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "0.8rem 0",
-              textDecoration: todo.completed ? "line-through" : "none",
-              color: todo.completed ? "#888" : "#000",
-            }}
-          >
-            <span
-              style={{ cursor: "pointer", flex: 1 }}
-              onClick={() => dispatch(toggleTodo(todo.id))}
-            >
-              {todo.text}
-            </span>
-            <button
-              onClick={() => dispatch(deleteTodo(todo.id))}
-              style={{
-                color: "red",
-                border: "none",
-                background: "none",
-                cursor: "pointer",
-              }}
-            >
-              Удалить
-            </button>
+    <div>
+      <ul className="list-none p-0">
+        {filteredTodos.length === 0 ? (
+          <li className="text-gray-500 italic py-2">
+            {searchTerm
+              ? 'Нет задач, совпадающих с поиском'
+              : getEmptyListMessage(filter)}
           </li>
-        ))
+        ) : (
+          filteredTodos.map((todo) => (
+            <li key={todo.id} className={`flex items-center justify-between px-2 py-3 ${todo.completed ? 'text-gray-500 line-through' : 'text-gray-800'}`}>
+              <span
+                className="flex-1 cursor-pointer hover:text-gray-900"
+                onClick={() => dispatch(toggleTodo(todo.id))}
+              >
+                {todo.text}
+              </span>
+              <button
+                onClick={() => dispatch(deleteTodo(todo.id))}
+                className="text-red-500 hover:text-red-700 text-sm font-medium"
+              >
+                Удалить
+              </button>
+
+              <small className="text-gray-400 text-xs mt-1">
+                {formatDate(todo.createdAt)}
+              </small>
+            </li>
+          ))
+        )}
+      </ul>
+
+      {todos.some((todo) => todo.completed) && (
+        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+          <button
+            onClick={() => dispatch(clearCompleted())}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-md cursor-pointer transition-colors"
+          >
+            Очистить завершённые
+          </button>
+        </div>
       )}
-    </ul>
+    </div>
   );
 }
 

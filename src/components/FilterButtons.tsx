@@ -10,28 +10,29 @@ const filterButtons = [
 
 function FilterButtons() {
   const dispatch = useDispatch();
-  const activeFilter = useSelector((state: RootState) => state.visibilityFilter);
+  const activeFilter = useSelector(
+    (state: RootState) => state.visibilityFilter,
+  );
 
   return (
-    <div style={{ marginBottom: '1.5rem' }}>
-      {filterButtons.map(({ value, label }) => (
-        <button
-          key={value}
-          type="button"
-          onClick={() => dispatch(setVisibilityFilter(value))}
-          style={{
-            padding: '0.6rem 1rem',
-            margin: '0 0.2rem',
-            border: '1px solid #ccc',
-            background: activeFilter === value ? '#007acc' : '#f0f0f0',
-            color: activeFilter === value ? 'white' : 'black',
-            cursor: 'pointer',
-            borderRadius: '4px',
-          }}
-        >
-          {label}
-        </button>
-      ))}
+    <div className="mb-6">
+      {filterButtons.map(({ value, label }) => {
+        const isActive = activeFilter === value;
+        const baseClasses = 'px-4 py-2 mx-1 border border-gray-300 rounded-md cursor-pointer text-sm font-medium transition-colors duration-200';
+        const activeClasses = 'bg-sky-600 text-white hover:bg-sky-700';
+        const inactiveClasses = 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+
+        return (
+          <button
+            key={value}
+            type="button"
+            onClick={() => dispatch(setVisibilityFilter(value))}
+            className={`${baseClasses} ${isActive ? activeClasses : inactiveClasses}`}
+          >
+            {label}
+          </button>
+        );
+      })}
     </div>
   );
 }

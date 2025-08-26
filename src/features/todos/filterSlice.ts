@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export type VisibilityFilter = "all" | "active" | "completed";
+export type VisibilityFilter = 'all' | 'active' | 'completed';
 
 const loadFilter = (): VisibilityFilter => {
   try {
@@ -29,7 +29,7 @@ const saveFilter = (filter: VisibilityFilter): void => {
 const initialState: VisibilityFilter = loadFilter();
 
 const filterSlice = createSlice({
-  name: "visibilityFilter",
+  name: 'visibilityFilter',
   initialState,
   reducers: {
     setVisibilityFilter: (state, action: PayloadAction<VisibilityFilter>) => {

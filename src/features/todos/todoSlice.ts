@@ -1,42 +1,21 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Todo {
   id: number;
   text: string;
   completed: boolean;
+  createdAt: string;
 }
 
-export type TodoState = { items: Todo[] };
-interface RawTodo {
-  id?: number;
-  text?: string;
-  completed?: boolean;
-}
-
-const isTodo = (item: any): item is Todo => {
-  return (
-    typeof item === 'object' &&
-    item !== null &&
-    typeof item.id === 'number' &&
-    typeof item.text === 'string' &&
-    typeof item.completed === 'boolean'
-  );
-};
-
+export interface TodoState { items: Todo[] }
 
 const loadState = (): TodoState => {
   try {
-    const saved = localStorage.getItem('todos');
+    const saved: string | null = localStorage.getItem('todos');
     if (saved === null) {
       return { items: [] };
     }
-    const parsed = JSON.parse(saved);
-    if (Array.isArray(parsed.items)) {
-      return {
-        items: parsed.items.filter(isTodo),
-      };
-    }
-    return { items: [] };
+    return JSON.parse(saved);
   } catch (e) {
     console.warn('Failed to load state from localStorage', e);
     return { items: [] };
@@ -55,7 +34,7 @@ const saveState = (state: TodoState) => {
 };
 
 const todoSlice = createSlice({
-  name: "todos",
+  name: 'todos',
   initialState,
   reducers: {
     addTodo: (state, action: PayloadAction<string>) => {
@@ -63,8 +42,13 @@ const todoSlice = createSlice({
         id: Date.now(),
         text: action.payload,
         completed: false,
+        createdAt: new Date().toISOString().split('T')[0],
       };
       state.items.push(newTodo);
+      saveState(state);
+    },
+    clearCompleted: (state) => {
+      state.items = state.items.filter((todo) => !todo.completed);
       saveState(state);
     },
     toggleTodo: (state, action: PayloadAction<number>) => {
@@ -81,5 +65,5 @@ const todoSlice = createSlice({
   }
 });
 
-export const { addTodo, toggleTodo, deleteTodo } = todoSlice.actions;
+export const { addTodo, clearCompleted, toggleTodo, deleteTodo } = todoSlice.actions;
 export default todoSlice.reducer;
