@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export type VisibilityFilter = 'all' | 'active' | 'completed';
+import { VisibilityFilter } from '../../types/filterSlice';
 
 const loadFilter = (): VisibilityFilter => {
   try {

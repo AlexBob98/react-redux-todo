@@ -1,13 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-  createdAt: string;
-}
-
-export interface TodoState { items: Todo[] }
+import { Todo, TodoState } from '../../interfaces/TodoSlice';
 
 const loadState = (): TodoState => {
   try {

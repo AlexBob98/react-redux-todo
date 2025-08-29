@@ -1,9 +1,5 @@
 import { ChangeEvent } from 'react';
-
-interface SearchInputProps {
-  value: string;
-  onChange: (value: string) => void;
-}
+import { SearchInputProps } from '../interfaces/searchInput';
 
 function SearchInput({ value, onChange }: SearchInputProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

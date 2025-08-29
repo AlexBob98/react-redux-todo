@@ -9,10 +9,7 @@ import { filterTodos } from '../utils/todoFilter';
 import { getEmptyListMessage } from '../utils/todoMessages';
 import { formatDate } from '../utils/formatDate';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface TodoListProps {
-  searchTerm: string;
-}
+import { TodoListProps } from '../interfaces/TodoList';
 
 function TodoList({ searchTerm }: TodoListProps) {
   const todos = useSelector((state: RootState) => state.todos.items);
