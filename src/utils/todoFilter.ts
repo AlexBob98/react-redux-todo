@@ -1,4 +1,4 @@
-import { Todo } from '../features/todos/todoSlice';
+import { Todo } from '../interfaces/TodoSlice';
 
 export const filterTodos = (todos: Todo[], filter: string, searchTerm: string = '') => {
   return todos
