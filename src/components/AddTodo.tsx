@@ -17,7 +17,7 @@ function AddTodo() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="my-4">
+    <form onSubmit={handleSubmit} className="my-4 flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
       <input
         id="new-todo"
         name="new-todo"
@@ -27,7 +27,7 @@ function AddTodo() {
         placeholder="Что нужно сделать?"
         className={ inputClasses }
       />
-      <button type="submit" className="ml-4 px-5 py-3 bg-blue-400 text-white hover:bg-blue-600">
+      <button type="submit" className="ml-0 sm:ml-4 px-5 py-3 bg-blue-400 text-white hover:bg-blue-600">
         Добавить
       </button>
     </form>
